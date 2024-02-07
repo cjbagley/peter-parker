@@ -1,0 +1,27 @@
+{
+  "name": "peter-parker",
+  "version": "1.0.0",
+  "description": "A basic web crawler, as part of a semi-guided boot.dev project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cjbagley/peter-parker.git"
+  },
+  "keywords": [
+    "web",
+    "crawler"
+  ],
+  "author": "Colin Bagley",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cjbagley/peter-parker/issues"
+  },
+  "homepage": "https://github.com/cjbagley/peter-parker#readme",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
