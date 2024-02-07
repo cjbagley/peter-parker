@@ -1,5 +1,5 @@
-const { test, expect } = require('@jest/globals')
-const { normalizeURL, normaliseURL } = require('./crawl.js')
+const { test, expect } = require('@jest/globals');
+const { normaliseURL, getURLsFromHTML } = require('./crawl.js');
 
 test('expects URL to be normalised', () => {
 
@@ -25,3 +25,21 @@ test('expects URL to be normalised', () => {
     expect(normaliseURL('https://github.com/ohmyzsh/ohmyzsh/issues/?q=is%3Aissue+is%3Aopen')).toBe(expected);
     expect(normaliseURL('http://github.com/ohmyzsh/ohmyzsh/issues?q=is%3Aissue+is%3Aopen')).toBe(expected);
 })
+
+test('find list of links in html', () => {
+    let expected = ['bbc.co.uk', 'blog.boot.dev/images'];
+    let html = `<html>
+        <body>
+            <h1>This is a test</h1>
+            <div>
+                <div>
+                    <p>here is some text</p>
+                    <a href="bbc.co.uk" class="test">Test</a>
+                    <p>Enjoy!</p>
+                </div>
+            </div>
+            <a href="/images"><span>Go to Images</span></a>
+        </body>
+    </html>`;
+    expect(getURLsFromHTML(html, 'https://blog.boot.dev')).toEqual(expected);
+});

@@ -23,5 +23,8 @@
   "homepage": "https://github.com/cjbagley/peter-parker#readme",
   "devDependencies": {
     "jest": "^29.7.0"
+  },
+  "dependencies": {
+    "jsdom": "^24.0.0"
   }
 }

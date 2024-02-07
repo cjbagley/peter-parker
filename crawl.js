@@ -1,18 +1,23 @@
 function normaliseURL(url = '') {
     if (url == '') {
-        return ''
+        return '';
     }
-    const parsed_url = new URL(url)
-    let new_url = parsed_url.host
+    const parsed_url = new URL(url);
+    let new_url = parsed_url.host;
     if (parsed_url.pathname != '' && parsed_url.pathname != '/') {
-        new_url += parsed_url.pathname.replace(/\/$/, '')
+        new_url += parsed_url.pathname.replace(/\/$/, '');
     }
     if (parsed_url.search != '' && parsed_url.search != '/') {
-        new_url += parsed_url.search
+        new_url += parsed_url.search;
     }
-    return new_url
+    return new_url;
+}
+
+function getURLsFromHTML(htmlBody, baseUrl) {
+    return [];
 }
 
 module.exports = {
-    normaliseURL
+    normaliseURL,
+    getURLsFromHTML
 }
