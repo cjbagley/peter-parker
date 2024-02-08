@@ -1,5 +1,5 @@
 const { argv } = require('node:process');
-const { normaliseURL, crawlPage } = require('./crawl.js');
+const { crawlPage } = require('./crawl.js');
 
 
 async function main() {
@@ -12,16 +12,19 @@ async function main() {
         return;
     }
     try {
-        url = 'https://' + normaliseURL(argv[2]);
-        console.log(`Starting web crawl for ${url}`);
+        url = new URL(argv[2]); 
+        baseURL = `https://${url.host.toLowerCase()}`;
+        console.log(`Starting web crawl for ${baseURL}`);
     } catch (error) {
         console.log(`Error with given URL: ${error.message}`);
+        return;
     }
 
     try {
-        console.log(await crawlPage(url));
+        console.log(await crawlPage(baseURL, baseURL));
     } catch (error) {
-        console.log(`Error getting content from page (${url}): ${error.message}`);
+        console.log(`Error getting content from page (${baseURL}): ${error.message}`);
+        return;
     }
 }
 

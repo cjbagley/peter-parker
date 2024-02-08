@@ -2,8 +2,8 @@ const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
 
-async function crawlPage(url) {
-    const response = await fetch(url);
+async function crawlPage(baseURL, currentURL, pages) {
+    const response = await fetch(currentURL);
     if (response.status >= 400) {
         throw Error(`Status ${response.status} ${response.statusText}`);
     }
@@ -42,7 +42,7 @@ function getURLsFromHTML(htmlBody, baseUrl) {
             }
             urls.push(href);
         } catch (err) {
-            console.log(err.message)
+            console.log(err.message);
         }
     });
     return urls;
