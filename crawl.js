@@ -1,3 +1,6 @@
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+
 function normaliseURL(url = '') {
     if (url == '') {
         return '';
@@ -14,7 +17,21 @@ function normaliseURL(url = '') {
 }
 
 function getURLsFromHTML(htmlBody, baseUrl) {
-    return [];
+    const dom = new JSDOM(htmlBody);
+    urls = [];
+    found = dom.window.document.querySelectorAll('a');
+    found.forEach((link) => {
+        try {
+            href = link.href;
+            if (href.startsWith("/")) {
+                href = baseUrl + href;
+            }
+            urls.push(href);
+        } catch (err) {
+            console.log(err.message)
+        }
+    });
+    return urls;
 }
 
 module.exports = {

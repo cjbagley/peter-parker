@@ -27,7 +27,7 @@ test('expects URL to be normalised', () => {
 })
 
 test('find list of links in html', () => {
-    let expected = ['bbc.co.uk', 'blog.boot.dev/images'];
+    let expected = ['bbc.co.uk', 'https://bbc.co.uk/sport', 'https://blog.boot.dev/images', 'https://blog.boot.dev/images/'];
     let html = `<html>
         <body>
             <h1>This is a test</h1>
@@ -35,11 +35,28 @@ test('find list of links in html', () => {
                 <div>
                     <p>here is some text</p>
                     <a href="bbc.co.uk" class="test">Test</a>
+                    <a href="https://bbc.co.uk/sport" class="test">Test 2</a>
                     <p>Enjoy!</p>
                 </div>
             </div>
             <a href="/images"><span>Go to Images</span></a>
+            <a href="/images/"><span>Go to Images, again</span></a>
         </body>
     </html>`;
     expect(getURLsFromHTML(html, 'https://blog.boot.dev')).toEqual(expected);
+});
+
+test('find empty list of links in html', () => {
+    let html = `<html>
+        <body>
+            <h1>This is a test</h1>
+            <div>
+                <div>
+                    <p>here is some text</p>
+                    <p>Enjoy!</p>
+                </div>
+            </div>
+        </body>
+    </html>`;
+    expect(getURLsFromHTML(html, 'https://blog.boot.dev')).toEqual([]);
 });
