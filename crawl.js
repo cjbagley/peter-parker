@@ -6,9 +6,9 @@ function normaliseURL(url = '') {
         return '';
     }
     const parsed_url = new URL(url);
-    let new_url = parsed_url.host;
+    let new_url = parsed_url.host.toLowerCase();
     if (parsed_url.pathname != '' && parsed_url.pathname != '/') {
-        new_url += parsed_url.pathname.replace(/\/$/, '');
+        new_url += parsed_url.pathname.replace(/\/$/, '').toLowerCase();
     }
     if (parsed_url.search != '' && parsed_url.search != '/') {
         new_url += parsed_url.search;
