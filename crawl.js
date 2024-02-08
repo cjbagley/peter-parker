@@ -1,6 +1,20 @@
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
+
+async function crawlPage(url) {
+    const response = await fetch(url);
+    if (response.status >= 400) {
+        throw Error(`Status ${response.status} ${response.statusText}`);
+    }
+    const contentType = response.headers.get('content-type');
+    if (!contentType.includes('text/html')) {
+        throw Error(`Expected content-type of 'text/html' but got: '${contentType}'`);
+    }
+    const body = await response.text();
+    return body;
+}
+
 function normaliseURL(url = '') {
     if (url == '') {
         return '';
@@ -36,5 +50,6 @@ function getURLsFromHTML(htmlBody, baseUrl) {
 
 module.exports = {
     normaliseURL,
-    getURLsFromHTML
+    getURLsFromHTML,
+    crawlPage
 }
