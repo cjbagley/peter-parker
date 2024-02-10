@@ -1,5 +1,6 @@
 const { test, expect } = require('@jest/globals');
 const { normaliseURL, getURLsFromHTML, getBaseURL } = require('./crawl.js');
+const { sortPages } = require('./report.js');
 
 test('Normalise root URL', () => {
     const expected = 'www.boot.dev'
@@ -76,4 +77,30 @@ test('Find empty list of links in html', () => {
         </body>
     </html>`;
     expect(getURLsFromHTML(html, 'https://blog.boot.dev')).toEqual([]);
+});
+
+test('Sort pages, largest value first and then by alphabetical keys', () => {
+    const unsorted = {
+        'test.com/contact': 4,
+        'test.com': 88,
+        'test.com/about': 4,
+        'test.com/pages/hello': 2,
+        'test.com/pages/hello-4': 1,
+        'test.com/pages/hello-1': 1,
+        'test.com/pages/something': 1,
+        'test.com/pages/answer': 1,
+        'test.com/pages/popular': 7,
+    };
+    const sorted = {
+        'test.com': 88,
+        'test.com/pages/popular': 7,
+        'test.com/about': 4,
+        'test.com/contact': 4,
+        'test.com/pages/hello': 2,
+        'test.com/pages/answer': 1,
+        'test.com/pages/hello-1': 1,
+        'test.com/pages/hello-4': 1,
+        'test.com/pages/something': 1,
+    };
+    expect(sortPages(unsorted)).toEqual(sorted);
 });
