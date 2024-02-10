@@ -48,8 +48,14 @@ function getURLsFromHTML(htmlBody, baseUrl) {
     return urls;
 }
 
+function getBaseURL(url) {
+    url = new URL(url);
+    return `https://${url.host.toLowerCase()}`;
+}
+
 module.exports = {
-    normaliseURL,
+    crawlPage,
+    getBaseURL,
     getURLsFromHTML,
-    crawlPage
+    normaliseURL
 }
