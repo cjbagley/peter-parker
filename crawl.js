@@ -2,17 +2,43 @@ const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
 
-async function crawlPage(baseURL, currentURL, pages) {
-    const response = await fetch(currentURL);
+async function crawlPage(baseURL, currentURL, pages = {}) {
+    // Only crawl links for the same website
+    if (baseURL != getBaseURL(currentURL)) {
+        return pages;
+    }
+
+    currentURL = normaliseURL(currentURL);
+
+    // Don't fetch the content again, just increase the counter
+    if (currentURL in pages) {
+        pages[currentURL]++;
+        return pages;
+    }
+    pages[currentURL] = (currentURL == baseURL) ? 0 : 1;
+
+    console.log(`Getting page content: ${currentURL}`);
+    const response = await fetch('https://' + currentURL);
     if (response.status >= 400) {
-        throw Error(`Status ${response.status} ${response.statusText}`);
+        console.log(`Ignored ${currentURL} - Status ${response.status} ${response.statusText}`);
+        return pages;
     }
     const contentType = response.headers.get('content-type');
     if (!contentType.includes('text/html')) {
-        throw Error(`Expected content-type of 'text/html' but got: '${contentType}'`);
+        console.log(`Ignored ${currentURL} - Expected content-type of 'text/html' but got: '${contentType}'`);
+        return pages;
     }
     const body = await response.text();
-    return body;
+    const links = getURLsFromHTML(body, baseURL);
+    if (links.length === 0) {
+        return pages;
+    }
+
+    for (const url of links) {
+        pages = await crawlPage(baseURL, url, pages);
+    }
+
+    return pages;
 }
 
 function normaliseURL(url = '') {

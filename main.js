@@ -1,5 +1,5 @@
 const { argv } = require('node:process');
-const { crawlPage } = require('./crawl.js');
+const { crawlPage, getBaseURL } = require('./crawl.js');
 
 
 async function main() {
@@ -12,18 +12,19 @@ async function main() {
         return;
     }
     try {
-        url = new URL(argv[2]); 
-        baseURL = `https://${url.host.toLowerCase()}`;
-        console.log(`Starting web crawl for ${baseURL}`);
+        baseURL = getBaseURL(argv[2]);
     } catch (error) {
         console.log(`Error with given URL: ${error.message}`);
         return;
     }
 
     try {
-        console.log(await crawlPage(baseURL, baseURL));
+        console.log(`Starting web crawl for ${baseURL}`);
+        pages = await crawlPage(baseURL, baseURL);
+        console.log(`Finished web crawl for ${baseURL}`);
+        console.log(pages);
     } catch (error) {
-        console.log(`Error getting content from page (${baseURL}): ${error.message}`);
+        console.log(`Could not complete crawl: ${error.message}`);
         return;
     }
 }
